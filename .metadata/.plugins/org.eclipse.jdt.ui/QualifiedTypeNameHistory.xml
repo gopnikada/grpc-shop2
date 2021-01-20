@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.kirill.org.userGrpc.userImplBase"/>
+    <fullyQualifiedTypeName name="io.grpc.ServerBuilder"/>
+    <fullyQualifiedTypeName name="user.UserService"/>
+    <fullyQualifiedTypeName name="io.grpc.Server"/>
+    <fullyQualifiedTypeName name="io.grpc.ManagedChannelBuilder"/>
+    <fullyQualifiedTypeName name="io.grpc.ManagedChannel"/>
+    <fullyQualifiedTypeName name="com.kirill.org.userGrpc"/>
+    <fullyQualifiedTypeName name="com.kirill.org.User.LoginRequest"/>
+    <fullyQualifiedTypeName name="com.kirill.org.User.APIResponse"/>
+</qualifiedTypeNameHistroy>

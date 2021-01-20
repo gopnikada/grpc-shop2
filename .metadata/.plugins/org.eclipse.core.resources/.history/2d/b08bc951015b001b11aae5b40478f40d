@@ -1,0 +1,54 @@
+package shop;
+
+import com.kirill.org.Shop.APIResponse;
+import com.kirill.org.Shop.Empty;
+import com.kirill.org.shopGrpc.shopImplBase;
+import com.kirill.org.Shop.Request;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.grpc.stub.StreamObserver;
+
+public class ShopService extends shopImplBase {
+	public static List<Item> items = new ArrayList<Item>(){{
+        add(new Item(1, "Samsung A5"));
+        add(new Item(2, "HTC XC"));
+        add(new Item(3, "BlackBerry"));
+    }};
+
+	@Override
+	public void getall(Empty request, StreamObserver<APIResponse> responseObserver) {
+			
+		APIResponse.Builder response = APIResponse.newBuilder();
+		
+		response.setResponseCode(0).setResponsemessage("SUCCESS");
+	
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void getOne(Request request, StreamObserver<APIResponse> responseObserver) {
+		int id = request.getId();
+		
+		Item reqItem = getItem(String.valueOf(id));				
+		
+		APIResponse.Builder response = APIResponse.newBuilder();
+		
+		response.setResponseCode(0).setResponsemessage("item is " + reqItem.getDescr());
+						
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+	}
+	
+	 private Item getItem(String id) {
+	        return items.stream()
+	                .filter(t -> Integer.parseInt(id)==t.getId())
+	                .findFirst()
+	                .orElse(null);
+	    }
+
+
+
+
+}

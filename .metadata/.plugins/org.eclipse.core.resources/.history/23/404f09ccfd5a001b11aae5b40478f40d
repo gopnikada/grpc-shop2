@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "com.kirill.org";
+
+
+service shop{
+    rpc getall(Empty)  returns (APIResponse);
+   
+}
+
+
+message APIResponse{
+      string responsemessage = 1;
+      int32  responseCode  = 2;
+}
+
+message Empty{
+}

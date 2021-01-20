@@ -1,0 +1,30 @@
+package shop;
+
+import com.kirill.org.Shop.APIResponse;
+import com.kirill.org.Shop.Empty;
+import com.kirill.org.shopGrpc.shopImplBase;
+
+import io.grpc.stub.StreamObserver;
+
+public class ShopService extends shopImplBase {
+
+	@Override
+	public void getall(Empty request, StreamObserver<APIResponse> responseObserver) {
+		
+		
+		APIResponse.Builder response = APIResponse.newBuilder();
+		
+			
+			response.setResponseCode(0).setResponsemessage("it1:..., it2...");
+			
+		
+		
+		
+		
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+	}
+
+
+
+}
