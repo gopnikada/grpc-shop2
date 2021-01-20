@@ -1,0 +1,76 @@
+package grpcClient;
+import java.io.*;
+
+import com.kirill.org.Shop.APIResponse;
+
+import com.kirill.org.Shop.OneResponse;
+import com.kirill.org.Shop.PLReq;
+import com.kirill.org.Shop.PurchReq;
+import com.kirill.org.Shop.PurchRes;
+import com.kirill.org.Shop.Request;
+import com.kirill.org.shopGrpc;
+import com.kirill.org.shopGrpc.shopBlockingStub;
+
+
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+
+public class GrpcClient {
+
+	public static void main(String[] args) throws IOException {
+		ManagedChannel channel = ManagedChannelBuilder
+		.forAddress("localhost", 9090)
+		.usePlaintext()
+		.build();
+		
+		shopBlockingStub shopStub = shopGrpc.newBlockingStub(channel);
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter RequestType: [Get all Items List] - 1, [Get One Item by Id] - 2, [Do an order] - 3,"+
+		" [Get Order List] - 4 ,[Get Order Details by order Id] - 5");
+        //String s = br.readLine();
+        int i = Integer.parseInt(br.readLine());
+        switch(i) {
+        case 1:
+        	APIResponse allResponse  = shopStub.getall(null);
+        	System.out.println(allResponse);
+        case 2:
+        	System.out.println("Enter id of item to view details: ");
+        	try {
+                int id = Integer.parseInt(br.readLine());
+                Request oneReq = Request.newBuilder().setId(id).build();
+            	OneResponse responseOne = shopStub.getOne(oneReq);
+            	System.out.println(responseOne);               
+            } catch(NumberFormatException nfe) {
+                System.err.println("Invalid Format!");
+            }
+        	
+        case 3:
+        case 4:
+        case 5:
+        }
+        try {
+            int k = Integer.parseInt(br.readLine());
+            //System.out.println(s);
+           
+        } catch(NumberFormatException nfe) {
+            System.err.println("Invalid Format!");
+        }
+		
+		
+		PurchReq purchReq = PurchReq.newBuilder().setId(3).setCount(5).build();
+		
+		
+		//PLReq plReq = PLReq.newBuilder().setLogin(value)
+		
+		
+		
+		//PurchRes puchResp = shopStub.purchase(purchReq);
+		
+		
+		
+		//System.out.println(s);
+	}
+
+}

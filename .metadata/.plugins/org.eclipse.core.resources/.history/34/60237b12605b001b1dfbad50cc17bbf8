@@ -1,0 +1,54 @@
+package grpcClient;
+import java.io.*;
+
+import com.kirill.org.Shop.APIResponse;
+
+import com.kirill.org.Shop.OneResponse;
+import com.kirill.org.Shop.PLReq;
+import com.kirill.org.Shop.PurchReq;
+import com.kirill.org.Shop.PurchRes;
+import com.kirill.org.Shop.Request;
+import com.kirill.org.shopGrpc;
+import com.kirill.org.shopGrpc.shopBlockingStub;
+
+
+
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+
+public class GrpcClient {
+
+	public static void main(String[] args) {
+		ManagedChannel channel = ManagedChannelBuilder
+		.forAddress("localhost", 9090)
+		.usePlaintext()
+		.build();
+		
+		shopBlockingStub shopStub = shopGrpc.newBlockingStub(channel);
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Enter String");
+        String s = br.readLine();
+        System.out.print("Enter Integer:");
+        try {
+            int i = Integer.parseInt(br.readLine());
+        } catch(NumberFormatException nfe) {
+            System.err.println("Invalid Format!");
+        }
+		
+		
+		PurchReq purchReq = PurchReq.newBuilder().setId(3).setCount(5).build();
+		
+		Request oneReq = Request.newBuilder().setId(2).build();
+		//PLReq plReq = PLReq.newBuilder().setLogin(value)
+		
+		//OneResponse responseOne = shopStub.getOne(oneReq);
+		//APIResponse allResponse  = shopStub.getall(null);
+		//PurchRes puchResp = shopStub.purchase(purchReq);
+		
+		
+		
+		//System.out.println(str);
+	}
+
+}
