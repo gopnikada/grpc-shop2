@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+option java_package = "com.kirill.org";
+
+
+service shop{
+    rpc getall(Empty)  returns (APIResponse);
+    rpc getOne(Request) returns (OneResponse);
+    rpc purchase(PurchReq) returns (PurchRes);
+    rpc getPurchList(PLReq) returns (PLRes);
+    rpc getOnePurch() returns ();
+}
+message OnePLReq{
+	string orderId = 1;
+}
+message OnePLRes{
+	string purchase = 1;
+}
+
+message PLReq{
+	string login = 1;
+	string password = 2;
+}
+message PLRes{
+	string purchList = 1;
+}
+
+message Request{
+	int32 id = 1;
+}
+
+
+message APIResponse{
+      string responsemessage = 1;
+      int32  responseCode  = 2;
+}
+message OneResponse{
+      int32 id = 1;
+      string description = 2;
+      int32 count = 3;
+}
+message PurchReq{
+      int32 id = 1;
+      int32 count = 2;
+      
+}
+message PurchRes{
+	string puResp = 1;
+}
+
+message Empty{
+}

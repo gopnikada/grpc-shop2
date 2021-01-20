@@ -1,0 +1,144 @@
+package shop;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.kirill.org.Shop.APIResponse;
+import com.kirill.org.Shop.OnePLReq;
+import com.kirill.org.Shop.OnePLRes;
+import com.kirill.org.Shop.OneResponse;
+import com.kirill.org.Shop.PLReq;
+import com.kirill.org.Shop.PLRes;
+import com.kirill.org.Shop.PurchReq;
+import com.kirill.org.Shop.PurchRes;
+import com.kirill.org.Shop.Request;
+import com.kirill.org.shopGrpc.shopImplBase;
+
+import io.grpc.netty.shaded.io.netty.util.internal.shaded.org.jctools.queues.ConcurrentCircularArrayQueue;
+import io.grpc.stub.StreamObserver;
+
+public class ShopService extends shopImplBase {
+	public static List<Item> items = new ArrayList<Item>(){{
+        add(new Item(1, "OREL A5", 4));
+        add(new Item(2, "HTC XC",5));
+        add(new Item(3, "BlackBerry",8));
+        add(new Item(4, "audi",9));
+        add(new Item(5, "bmv",2));
+    }};
+    public static List<Order> orders = new ArrayList<Order>();
+    int ordSize = orders.size();
+
+	@Override
+	public void getall(com.kirill.org.Shop.Empty request, StreamObserver<APIResponse> responseObserver) {
+		 APIResponse.Builder response = APIResponse.newBuilder();
+	      JSONObject obj = new JSONObject();
+	      JSONArray ja = new JSONArray(items);
+	      
+	      response.setResponseCode(0).setResponsemessage(ja.toString());
+	      
+	      responseObserver.onNext(response.build());
+	      responseObserver.onCompleted();
+	}
+
+
+	@Override
+	public void getOne(Request request, StreamObserver<OneResponse> responseObserver) {
+		 int id = request.getId();
+		    OneResponse.Builder response = OneResponse.newBuilder();
+//		    JSONObject obj = new JSONObject();
+//		    JSONArray ja = new JSONArray(items);
+		    
+		    Item fi = getItem(String.valueOf(id));
+		    if(id <= items.size() || id <= 0) {
+		      response.setCount(fi.getCount()).setDescription(fi.getDescr()).setId(id);
+		    }else {
+		      response.setCount(0).setDescription("error").setId(0);
+		    }
+		      
+		    responseObserver.onNext(response.build());
+		    responseObserver.onCompleted();
+	}
+
+
+	@Override
+	public void purchase(PurchReq request, StreamObserver<PurchRes> responseObserver) {
+		int id = request.getId();
+		int count = request.getCount();		
+		PurchRes.Builder response = PurchRes.newBuilder();
+		Item fi = getItem(String.valueOf(id));	
+		if(fi.getCount()>=count) {
+			fi.setCount(fi.getCount() - count);
+			orders.add(new Order(fi.getId(), fi.getCount(), ++ordSize));
+			response.setPuResp("Item " 
+					+ fi.getDescr() 
+					+ " was purchased in count of "
+					+ count);
+		}else {
+			response.setPuResp("no such count of item " + fi.getDescr() );
+		}
+		
+		
+		
+		 responseObserver.onNext(response.build());
+		 responseObserver.onCompleted();
+		
+	}
+
+	@Override
+	public void getPurchList(PLReq request, StreamObserver<PLRes> responseObserver) {
+		String login = request.getLogin();
+		String password = request.getPassword();
+		
+		PLRes.Builder response = PLRes.newBuilder();
+		
+		String admLogin = "odmen";
+		String admPassword = "parol";
+		
+		if(login.equals(admLogin) && password.equals(admPassword)) {
+			JSONArray ja = new JSONArray(orders);
+			response.setPurchList(ja.toString());
+			for(Order o: orders) {
+				System.out.println(getItem(String.valueOf(o.getId())).getDescr()+" ----- order id =" + o.getOid());
+			}
+		}else {
+			response.setPurchList("Check login or password");
+		}
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+		
+	}
+
+	@Override
+	public void getOnePurch(OnePLReq request, StreamObserver<OnePLRes> responseObserver) {
+		int id = request.getOrderId();
+		OnePLRes.Builder response = OnePLRes.newBuilder();
+		
+			Order fo = orders.get(2);
+			JSONArray jo = new JSONArray(fo);
+			response.setPurchase(items.get(2).toString());
+		
+		
+		responseObserver.onNext(response.build());
+		responseObserver.onCompleted();
+		
+	}
+
+
+	private Item getItem(String id) {
+	        return items.stream()
+	                .filter(t -> Integer.parseInt(id)==t.getId())
+	                .findFirst()
+	                .orElse(null);
+	    }
+	
+	private Order getOrder(String id) {
+        return orders.stream()
+                .filter(t -> Integer.parseInt(id) == t.getOid())
+                .findFirst()
+                .orElse(null);
+    }
+
+}
