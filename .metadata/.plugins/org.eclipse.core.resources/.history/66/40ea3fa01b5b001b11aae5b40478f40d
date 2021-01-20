@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_package = "com.kirill.org";
+
+
+service shop{
+    
+    rpc getOne(Request) returns (OneResponse);
+}
+
+message Request{
+	int32 id = 1;
+}
+
+message OneResponse{
+      int32 id = 1;
+      string  description  = 2;
+      int32 count = 3;
+}
+
+message Empty{
+}
