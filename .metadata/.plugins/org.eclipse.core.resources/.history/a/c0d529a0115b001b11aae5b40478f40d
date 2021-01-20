@@ -1,0 +1,35 @@
+package shop;
+
+import com.kirill.org.Shop.APIResponse;
+import com.kirill.org.Shop.Empty;
+import com.kirill.org.shopGrpc.shopImplBase;
+import com.kirill.org.Shop.Request;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+
+import io.grpc.stub.StreamObserver;
+
+public class ShopService extends shopImplBase {
+	public static List<Item> items = new ArrayList<Item>(){{
+        add(new Item(1, "Samsung A5"));
+        add(new Item(2, "HTC XC"));
+        add(new Item(3, "BlackBerry"));
+        add(new Item(4, "audi"));
+        add(new Item(5, "bmv"));
+    }};
+
+	
+	
+	 private Item getItem(String id) {
+	        return items.stream()
+	                .filter(t -> Integer.parseInt(id)==t.getId())
+	                .findFirst()
+	                .orElse(null);
+	    }
+
+
+
+
+}

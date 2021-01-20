@@ -24,6 +24,10 @@ public class GrpcClient {
 				.newBuilder()
 				.setId(15)
 				.build();
+		 
+		 Request getAllReq = Request
+					.newBuilder()
+					.build();
 		
 		APIResponse response = shopStub.getOne(getOneReq);
 		
